@@ -1,0 +1,77 @@
+package com.example.hospital.entities;
+
+import com.example.hospital.enums.Disponibilidad;
+import com.example.hospital.enums.Especialidad;
+import com.example.hospital.enums.EstadoRegistro;
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter @Setter
+@Table(name = "MEDICOS")
+public class Medico {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID_MEDICO")
+    private Long id;
+
+    @Column(name = "NOMBRE", length = 50, nullable = false)
+    private String nombre;
+
+    @Column(name = "APELLIDO_PATERNO", length = 50, nullable = false)
+    private String apellidoPaterno;
+
+    @Column(name = "APELLIDO_MATERNO", length = 50, nullable = false)
+    private String apellidoMaterno;
+
+    @Column(name = "EDAD", nullable = false) //declarar tamanio
+    private  Integer edad;
+
+    @Column(name = "EMAIL", length = 100, nullable = false)
+    private  String email;
+
+    @Column(name = "TELEFONO", length = 10, nullable = false)
+    private String telefono;
+
+    @Column(name = "CEDULA_PROFESIONAL",length = 12, nullable = false)
+    private  String cedulaProfesional;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ESPECIALIDAD", length = 30, nullable = false)
+    private Especialidad especialidad;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "DISPONIBILIDAD", length = 30, nullable = false)
+    private Disponibilidad disponibilidad;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ESTADO_REGISTRO", length = 30, nullable = false)
+    private EstadoRegistro estadoRegistro;
+
+    public void actualizar(String nombre, String apellidoPaterno,
+                           String apellidoMaterno, String email, String telefono){
+
+        this.nombre = nombre.trim();
+        this.apellidoPaterno = apellidoPaterno.trim();
+        this.apellidoMaterno = apellidoMaterno.trim();
+        this.email = email.trim();
+        this.telefono = telefono.trim();
+    }
+
+    public Medico(String nombre, String apellidoPaterno, String apellidoMaterno, Integer edad, String email, String telefono, String cedulaProfesional, Especialidad especialidad, Disponibilidad disponibilidad, EstadoRegistro estadoRegistro) {
+        this.nombre = nombre;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
+        this.edad = edad;
+        this.email = email;
+        this.telefono = telefono;
+        this.cedulaProfesional = cedulaProfesional;
+        this.especialidad = especialidad;
+        this.disponibilidad = disponibilidad;
+        this.estadoRegistro = estadoRegistro;
+    }
+
+}

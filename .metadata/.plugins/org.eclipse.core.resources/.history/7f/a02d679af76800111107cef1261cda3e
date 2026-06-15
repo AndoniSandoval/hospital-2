@@ -1,0 +1,111 @@
+package com.andoni.medicos.services;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.andoni.commons.dto.MedicoRequest;
+import com.andoni.commons.dto.MedicoResponse;
+import com.andoni.commons.enums.EspecialidadMedico;
+import com.andoni.commons.enums.EstadoRegistro;
+import com.andoni.commons.exceptions.RecursoNoEncontradoException;
+import com.andoni.medicos.repositories.*;
+import com.andoni.medicos.entities.Medico;
+import com.andoni.medicos.mappers.*;
+
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@AllArgsConstructor
+@Slf4j
+public class MedicoServiceImpl implements MedicoService {
+
+    private final MedicoRepository medicoRepository;
+    private final MedicoMapper medicoMapper;
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<MedicoResponse> listar() {
+        log.info("Listado de todos los medicos activos solicitado");
+        return medicoRepository.findByEstadoRegistro(EstadoRegistro.ACTIVO).stream()
+                .map(medicoMapper::entidadAResponse).toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public MedicoResponse obtenerPorId(Long id) {
+        return medicoMapper.entidadAResponse(obtenerMedicoActivoPorId(id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public MedicoResponse obtenerMedicoPorIdSinEstado(Long id) {
+        return medicoRepository.findById(id)
+                .map(medicoMapper::entidadAResponse)
+                .orElseThrow(() -> new RecursoNoEncontrado ("Medico no encontrado con id: " + id));
+    }
+
+    @Override
+    public MedicoResponse registrar(MedicoRequest request) {
+    	log.info("Registrando nuevo medico {}", request.nombre());
+    	validarDatosUnicos();
+    	
+    	Medico medico = medicoMapper.requestAEntidad(request);
+    	
+    	medico.actualizarDisponibilidad(
+    			EspecialidadMedico.obtenerEspecialidadPorCodigo(request.idEspecialidad()));
+    	medicoRepository.save(medico);
+    	log.info("Nuevo medico restistrado {}");
+    	return medicoMapper.entidadAResponse(medico);
+    }
+
+    @Override
+    public MedicoResponse actualizar(MedicoRequest request, Long id) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void eliminar(Long id) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void actualizarDisponibilidadMedico(Long idMedico, Long idDisponibilidad) {
+        // TODO Auto-generated method stub
+    }
+
+    private Medico obtenerMedicoActivoPorId(Long id) {
+        log.info("Buscando medico con estado {} con id: {}", EstadoRegistro.ACTIVO, id);
+        return medicoRepository.findByIdAndEstadoRegistro(id, EstadoRegistro.ACTIVO).orElseThrow(() -> new RecursoNoEncontrado("Medico activo no encontrado con id: " + id));
+    }
+    private void validarDatosUnicos(MedicoRequest request) {
+        log.info("Validando email único...");
+        if (medicoRepository.existsByEmailIgnoreCaseAndEstadoRegistro(request.email().trim(), EstadoRegistro.ACTIVO))
+            throw new IllegalArgumentException("Ya existe un médico activo registrado con el email: " + request.email());
+
+        log.info("Validando teléfono único...");
+        if (medicoRepository.existsByTelefonoAndEstadoRegistro(request.telefono().trim(), EstadoRegistro.ACTIVO))
+            throw new IllegalArgumentException("Ya existe un médico activo registrado con el teléfono: " + request.telefono());
+
+        log.info("Validando cédula profesional única...");
+        if (medicoRepository.existsByCedulaProfesionalIgnoreCaseAndEstadoRegistro(request.cedulaProfesional().trim(), EstadoRegistro.ACTIVO))
+            throw new IllegalArgumentException("Ya existe un médico activo registrado con la cédula: " + request.telefono());
+    }
+
+    private void validarCambiosUnicos(MedicoRequest request, Long id) {
+        log.info("Validando email único...");
+        if (medicoRepository.existsByEmailIgnoreCaseAndEstadoRegistroAndIdNot(request.email().trim(), EstadoRegistro.ACTIVO, id))
+            throw new IllegalArgumentException("Ya existe un médico activo registrado con el email: " + request.email());
+
+        log.info("Validando teléfono único...");
+        if (medicoRepository.existsByTelefonoAndEstadoRegistroAndIdNot(request.telefono().trim(), EstadoRegistro.ACTIVO, id))
+            throw new IllegalArgumentException("Ya existe un médico activo registrado con el teléfono: " + request.telefono());
+
+        log.info("Validando cédula profesional única...");
+        if (medicoRepository.existsByCedulaProfesionalIgnoreCaseAndEstadoRegistroAndIdNot(request.cedulaProfesional().trim(),
+                EstadoRegistro.ACTIVO, id))
+            throw new IllegalArgumentException("Ya existe un médico activo registrado con la cédula: " + request.telefono());
+    }

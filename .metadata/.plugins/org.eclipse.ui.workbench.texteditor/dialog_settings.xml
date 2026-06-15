@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="java.lang.Class">
+		<item key="replaceBarOpen" value="false"/>
+		<list key="findhistory">
+			<item value="lombok"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item key="selection" value="validar"/>
+		<item key="casesensitive" value="false"/>
+		<item key="wholeword" value="false"/>
+		<item key="isRegEx" value="false"/>
+		<list key="findhistory">
+			<item value="VALIDAR"/>
+			<item value="miguel"/>
+			<item value="eric"/>
+			<item value="cedula"/>
+			<item value="adrian"/>
+		</list>
+		<list key="replacehistory">
+			<item value="andoni"/>
+			<item value="cedulaProfesional"/>
+		</list>
+	</section>
+</section>

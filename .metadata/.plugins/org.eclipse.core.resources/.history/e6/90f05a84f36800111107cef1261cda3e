@@ -1,0 +1,80 @@
+package com.andoni.medicos.services;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.andoni.commons.dto.MedicoRequest;
+import com.andoni.commons.dto.MedicoResponse;
+import com.andoni.commons.enums.EstadoRegistro;
+import com.andoni.commons.exceptions.RecursoNoEncontradoException;
+import com.andoni.medicos.repositories.*;
+import com.andoni.medicos.entities.Medico;
+import com.andoni.medicos.mappers.*;
+
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@AllArgsConstructor
+@Transactional
+@Slf4j
+public class MedicoServiceImpl implements MedicoService {
+
+	private final MedicoRepository medicoRepository;
+	private final MedicoMapper medicoMapper;
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<MedicoResponse> listar() {
+		log.info("Listado de todos los medicos activos solicitado");
+		return medicoRepository.findByEstadoRegistro(EstadoRegistro.ACTIVO).stream()
+				.map(medicoMapper::entidadAResponse).toList();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public MedicoResponse obtenerPorId(Long id) {
+		return medicoMapper.entidadAResponse(obtenerMedicoActivoPorId(id));
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public MedicoResponse obtenerMedicoPorIdSinEstado(Long id) {
+		return medicoMapper.entidadAResponse(medicoRepository.findById(id))
+				.orElseThrow(() -> new RecursoNoEncontradoException("Medico no encontrado con id: " + id));
+	}
+
+	@Override
+	public MedicoResponse registrar(MedicoRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MedicoResponse actualizar(MedicoRequest request, Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void eliminar(Long id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+
+	@Override
+	public void actualizarDisponibilidadMedico(Long idMedico, Long idDisponibilidad) {
+		// TODO Auto-generated method stub
+	}
+	
+	private Medico obtenerMedicoActivoPorId(Long id) {
+		log.info("Buscando medico con estado {} con id: {}", EstadoRegistro.ACTIVO, id);
+		return medicoRepository.findByIdAndEstadoRegistro(id, EstadoRegistro.ACTIVO).orElseThrow(() -> 
+		new RecursoNoEncontradoException("Medico activo no encontrado con id: " + id));
+	}
+
+}

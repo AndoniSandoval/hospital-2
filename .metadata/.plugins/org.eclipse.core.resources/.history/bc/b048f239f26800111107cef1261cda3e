@@ -1,0 +1,70 @@
+package com.andoni.medicos.services;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.andoni.commons.dto.MedicoRequest;
+import com.andoni.commons.dto.MedicoResponse;
+import com.andoni.commons.enums.EstadoRegistro;
+import com.andoni.medicos.mappers.MedicoMapper;
+import com.andoni.medicos.repositories.MedicoRepository;
+
+import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@AllArgsConstructor
+@Transactional
+@Slf4j
+public class MedicoServiceImpl implements MedicoService{
+	
+	private final MedicoRepository medicoRepository;
+	private final MedicoMapper medicoMapper;
+	
+	@Override
+	public List<MedicoResponse> listar() {
+		log.info("Listando ");
+		return medicoRepository.findByEstadoRegistro(EstadoRegistro.ACTIVO)
+				.stream()
+				.map(medicoMapper::entidadAResponse)
+				.toList();
+	}
+	@Override
+	public MedicoResponse obtenerPorId(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public MedicoResponse registar(MedicoRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public MedicoResponse actualizar(MedicoRequest request, Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void eliminar(Long id) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public MedicoResponse obtenerMedicoPorIdSinEstado(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void actualizarDisponibilidadMedico(Long idMedico, Long idDisponibilidad) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	private Medico obtenerMedicoActivoOException(Long id) {
+		log.info("Buscando medico con estado {} con id: {}", EstadoRegistro.ACTIVO, id);
+		return medicoRepository.findByIdAndEstadoRegistro(id, EstadoRegistro.ACTIVO).orElseThrow(() -> new RecursoNoEncontradoException("Medico activo no encontrado on id: " + id));
+	}
+
+}
