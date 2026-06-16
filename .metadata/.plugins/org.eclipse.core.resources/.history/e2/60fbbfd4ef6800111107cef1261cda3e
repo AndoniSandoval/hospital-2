@@ -1,5 +1,0 @@
-package com.andoni.medicos.services;
-
-public interface MedicoService {
-
-}

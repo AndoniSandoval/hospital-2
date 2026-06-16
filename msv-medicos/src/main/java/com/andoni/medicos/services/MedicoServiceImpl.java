@@ -65,7 +65,8 @@ public class MedicoServiceImpl implements MedicoService {
 		medico.actualizar(
 				request.nombre(), 
 				request.apellidoPaterno(), 
-				request.apellidoMaterno(), 
+				request.apellidoMaterno(),
+				request.edad(),
 				request.email(), 
 				request.telefono(),
 				request.cedulaProfesional(),
@@ -97,9 +98,9 @@ public class MedicoServiceImpl implements MedicoService {
 		
 		log.info("Actualizando la disponibilidad del medico con id: {}", idMedico);
 		
-		DisponibiidadMedico nuevaDisponibilidad = DisponibilidadMedico.obtenerDisponibilidadPorCodigo(idDisponibilidad);
+		DisponibilidadMedico nuevaDisponibilidad = DisponibilidadMedico.obtenerDisponibilidadPorCodigo(idDisponibilidad);
 		
-		DisponibiidadMedico anteriorDisponibilidad = medico.getDisponibilidad();
+		DisponibilidadMedico anteriorDisponibilidad = medico.getDisponibilidad();
 		
 		medico.actualizarDisponibilidad(nuevaDisponibilidad);
 		

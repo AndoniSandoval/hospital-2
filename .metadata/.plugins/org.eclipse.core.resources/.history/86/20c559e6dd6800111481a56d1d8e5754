@@ -1,8 +1,0 @@
-package com.andoni.commons.exceptions;
-
-public class Snippet {
-	public static void main(String[] args) {
-		package com.andoni.commons.utils;
-	}
-}
-
