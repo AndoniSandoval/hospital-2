@@ -1,6 +1,8 @@
 package com.andoni.commons.exceptions;
 
 import com.andoni.commons.dto.CustomErrorResponse;
+
+import feign.FeignException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -64,6 +66,25 @@ public class GlobalHandlerException {
         log.warn("Error al eliminar un recurso: {}", e.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(new CustomErrorResponse(HttpStatus.CONFLICT.value(), e.getMessage()));
+    }
+    
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<CustomErrorResponse> handleGenericFeignException(FeignException e) {
+        log.error("Error en la comunicación Feign: " + e.getMessage());
+
+        int status = e.status() > 0 ? e.status() : HttpStatus.INTERNAL_SERVER_ERROR.value();
+        String message = switch (status) {
+            case 400 -> "Solicitud incorrecta al servicio remoto.";
+            case 401 -> "No autorizado para acceder al servicio remoto.";
+            case 403 -> "Acceso prohibido al servicio remoto.";
+            case 404 -> "Recurso no encontrado en el servicio remoto.";
+            case 409 -> "Conflicto: el recurso tiene dependencias activas.";
+            case 503 -> "Servicio remoto no disponible.";
+            default -> "Error al comunicarse con el servicio remoto.";
+        };
+        CustomErrorResponse response = new CustomErrorResponse(status, message);
+
+        return ResponseEntity.status(status).body(response);
     }
 
     @ExceptionHandler(RecursoNoEncontradoException.class)
