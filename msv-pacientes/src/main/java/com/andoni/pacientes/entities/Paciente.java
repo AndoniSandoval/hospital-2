@@ -3,8 +3,6 @@ package com.andoni.pacientes.entities;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import com.andoni.commons.enums.DisponibilidadMedico;
-import com.andoni.commons.enums.EspecialidadMedico;
 import com.andoni.commons.enums.EstadoRegistro;
 import com.andoni.commons.utils.StringCustomUtils;
 import com.andoni.commons.utils.ValoresNumericosUtils;
@@ -21,7 +19,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 @Entity
