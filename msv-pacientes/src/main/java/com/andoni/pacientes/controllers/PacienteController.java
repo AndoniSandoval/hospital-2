@@ -21,7 +21,7 @@ public class PacienteController extends CommonController<PacienteRequest, Pacien
 		super(service);
 	}
 	
-	@GetMapping("/id-pacieeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeente/{id}")
+	@GetMapping("/id-paciente/{id}")
 	public ResponseEntity<PacienteResponse> obtenerMedicoPorIdSinEstado(
 			@PathVariable @Positive(message = "El ID debe ser positivo") Long id) {
 	    return ResponseEntity.ok(service.obtenerPacientePorIdSinEstado(id));
