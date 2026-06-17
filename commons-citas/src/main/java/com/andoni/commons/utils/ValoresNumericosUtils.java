@@ -30,4 +30,12 @@ public class ValoresNumericosUtils {
     		throw new IllegalArgumentException(mensaje);
     	}
     }
+    
+    public static void validarRangoDouble (Double numero, Double min, Double max, String mensaje) {
+    	validarNumeroRequerido(numero);
+    	
+    	if (numero < min || numero > max ) {
+    		throw new IllegalArgumentException(mensaje);
+    	}
+    }
 }
