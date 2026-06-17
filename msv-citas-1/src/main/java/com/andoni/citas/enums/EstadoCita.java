@@ -3,7 +3,6 @@ package com.andoni.citas.enums;
 import java.util.EnumSet;
 import java.util.Set;
 
-import com.andoni.commons.enums.DisponibilidadMedico;
 import com.andoni.commons.exceptions.RecursoNoEncontradoException;
 
 import lombok.AllArgsConstructor;

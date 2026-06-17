@@ -3,8 +3,6 @@ package com.andoni.citas.entities;
 import java.time.LocalDateTime;
 
 import com.andoni.citas.enums.EstadoCita;
-import com.andoni.commons.enums.DisponibilidadMedico;
-import com.andoni.commons.enums.EspecialidadMedico;
 import com.andoni.commons.enums.EstadoRegistro;
 import com.andoni.commons.utils.StringCustomUtils;
 
@@ -21,7 +19,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 @Entity

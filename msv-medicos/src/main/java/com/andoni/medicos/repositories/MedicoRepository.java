@@ -23,5 +23,4 @@ public interface MedicoRepository extends JpaRepository<Medico, Long>{
 	boolean existsByTelefonoAndEstadoRegistroAndIdNot(String telefono, EstadoRegistro estadoRegistro, Long id);
 	boolean existsByCedulaProfesionalIgnoreCaseAndEstadoRegistroAndIdNot(String cedulaProfesional, EstadoRegistro estadoRegistro, Long id);
 	
-
 }

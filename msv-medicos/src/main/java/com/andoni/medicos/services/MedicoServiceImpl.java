@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.andoni.commons.clients.CitasClient;
 import com.andoni.commons.dto.MedicoRequest;
 import com.andoni.commons.dto.MedicoResponse;
 import com.andoni.commons.enums.DisponibilidadMedico;
@@ -28,6 +29,8 @@ public class MedicoServiceImpl implements MedicoService {
 	private final MedicoRepository medicoRepository;
 	
 	private final MedicoMapper medicoMapper;
+	
+	private final CitasClient citaClient;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -59,6 +62,8 @@ public class MedicoServiceImpl implements MedicoService {
 		
 		Medico medico = obtenerMedicoActivoOException(id);
 		
+		medicoTieneCitasAsignadas(id);
+		
 		validarCambiosUnicos(request, id);
 		
 		medico.actualizar(
@@ -82,6 +87,8 @@ public class MedicoServiceImpl implements MedicoService {
 		log.info("Eliminando medico con id: {}", id);
 	    
 	    Medico medico = obtenerMedicoActivoOException(id);
+	    
+	    medicoTieneCitasAsignadas(id);
 	    
 	    medico.eliminar();
 	    
@@ -164,5 +171,9 @@ public class MedicoServiceImpl implements MedicoService {
 		log.info("Nuevo medico registrado {}", medico.getNombre());
 		
 		return medicoMapper.entidadAResponse(medico);
+	}
+	
+	private void medicoTieneCitasAsignadas(Long idMedico) {
+		citaClient.medicoTieneCitasAsignadas(idMedico);
 	}
 }

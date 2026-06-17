@@ -8,7 +8,6 @@ import com.andoni.commons.mappers.CommonMapper;
 import com.andoni.commons.dto.MedicoResponse;
 import com.andoni.commons.dto.MedicoRequest;
 import com.andoni.medicos.entities.Medico;
-import org.springframework.stereotype.Component;
 
 @Component
 public class MedicoMapper implements CommonMapper<MedicoRequest, MedicoResponse, Medico>{
