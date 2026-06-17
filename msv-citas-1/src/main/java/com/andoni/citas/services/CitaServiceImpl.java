@@ -187,11 +187,11 @@ public class CitaServiceImpl implements CitaService {
 	public void medicoTieneCitasAsignados(Long idMedico) {
 		log.info("Validando si el médico tiene una cita activa con los estados: {}", ESTADOS_INVALIDOS_REGISTROS_ASIGNADOS);
 	    
-	    boolean tieneCitas = citaRepository.existsByIdMedicoAndIgnoreCaseAndEstadoCitaIn
-	    		(
-                        idMedico, 
-                        EstadoRegistro.ACTIVO, 
-                        ESTADOS_INVALIDOS_REGISTROS_ASIGNADOS);
+	    boolean tieneCitas = citaRepository
+	    		.existsByIdMedicoAndEstadoRegistroAndEstadoCitaIn(
+	    				idMedico, 
+	    				EstadoRegistro.ACTIVO, 
+	    				ESTADOS_INVALIDOS_REGISTROS_ASIGNADOS);
 
         if (tieneCitas) {
             throw new EntidadRelacionadaException(
