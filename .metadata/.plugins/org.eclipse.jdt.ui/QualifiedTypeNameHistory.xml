@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="java.util.EnumSet"/>
-    <fullyQualifiedTypeName name="jakarta.persistence.Table"/>
-    <fullyQualifiedTypeName name="lombok.AccessLevel"/>
-    <fullyQualifiedTypeName name="lombok.NoArgsConstructor"/>
-    <fullyQualifiedTypeName name="jakarta.persistence.Column"/>
-    <fullyQualifiedTypeName name="jakarta.persistence.GeneratedValue"/>
-    <fullyQualifiedTypeName name="jakarta.persistence.Id"/>
     <fullyQualifiedTypeName name="jakarta.persistence.GenerationType"/>
-    <fullyQualifiedTypeName name="com.andoni.commons.enums.EstadoRegistro"/>
     <fullyQualifiedTypeName name="jakarta.validation.constraints.NotNull"/>
     <fullyQualifiedTypeName name="jakarta.validation.constraints.Positive"/>
     <fullyQualifiedTypeName name="jakarta.validation.constraints.NotBlank"/>
@@ -19,20 +11,13 @@
     <fullyQualifiedTypeName name="java.time.LocalDateTime"/>
     <fullyQualifiedTypeName name="com.andoni.commons.dto.DatosPaciente"/>
     <fullyQualifiedTypeName name="com.andoni.commons.dto.DatosMedico"/>
-    <fullyQualifiedTypeName name="com.andoni.commons.services.CrudService"/>
     <fullyQualifiedTypeName name="com.andoni.citas.dto.CItaRequest"/>
-    <fullyQualifiedTypeName name="org.springframework.stereotype.Service"/>
-    <fullyQualifiedTypeName name="lombok.AllArgsConstructor"/>
-    <fullyQualifiedTypeName name="lombok.extern.slf4j.Slf4j"/>
-    <fullyQualifiedTypeName name="jakarta.transaction.Transactional"/>
     <fullyQualifiedTypeName name="com.andoni.citas.repositories.CitaRepository"/>
     <fullyQualifiedTypeName name="com.andoni.citas.mappers.CitaMapper"/>
     <fullyQualifiedTypeName name="com.andoni.commons.clients.MedicoClient"/>
-    <fullyQualifiedTypeName name="org.springframework.transaction.annotation.Transactional"/>
     <fullyQualifiedTypeName name="java.lang.Object"/>
     <fullyQualifiedTypeName name="com.andoni.commons.dto.MedicoResponse"/>
     <fullyQualifiedTypeName name="com.andoni.citas.entities.Cita"/>
-    <fullyQualifiedTypeName name="com.andoni.commons.exceptions.RecursoNoEncontradoException"/>
     <fullyQualifiedTypeName name="com.andoni.commons.enums.DisponibilidadMedico"/>
     <fullyQualifiedTypeName name="java.awt.List"/>
     <fullyQualifiedTypeName name="com.andoni.citas.enums.EstadoCita"/>
@@ -57,7 +42,22 @@
     <fullyQualifiedTypeName name="jakarta.validation.constraints.DecimalMax"/>
     <fullyQualifiedTypeName name="org.springframework.stereotype.Component"/>
     <fullyQualifiedTypeName name="com.andoni.commons.mappers.CommonMapper"/>
+    <fullyQualifiedTypeName name="com.andoni.commons.services.CrudService"/>
     <fullyQualifiedTypeName name="com.andoni.commons.dto.PacienteRequest"/>
     <fullyQualifiedTypeName name="com.andoni.commons.dto.PacienteResponse"/>
+    <fullyQualifiedTypeName name="org.springframework.stereotype.Service"/>
+    <fullyQualifiedTypeName name="lombok.extern.slf4j.Slf4j"/>
+    <fullyQualifiedTypeName name="lombok.AllArgsConstructor"/>
+    <fullyQualifiedTypeName name="org.springframework.cloud.openfeign.EnableFeignClients"/>
+    <fullyQualifiedTypeName name="org.springframework.cloud.openfeign.FeignClient"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.GetMapping"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PathVariable"/>
+    <fullyQualifiedTypeName name="com.andoni.pacientes.repositories.PacienteRepository"/>
+    <fullyQualifiedTypeName name="com.andoni.pacientes.mappers.PacienteMapper"/>
+    <fullyQualifiedTypeName name="com.andoni.commons.clients.CitasClient"/>
+    <fullyQualifiedTypeName name="jakarta.transaction.Transactional"/>
+    <fullyQualifiedTypeName name="com.andoni.commons.enums.EstadoRegistro"/>
+    <fullyQualifiedTypeName name="org.springframework.transaction.annotation.Transactional"/>
     <fullyQualifiedTypeName name="com.andoni.pacientes.entities.Paciente"/>
+    <fullyQualifiedTypeName name="com.andoni.commons.exceptions.RecursoNoEncontradoException"/>
 </qualifiedTypeNameHistroy>
