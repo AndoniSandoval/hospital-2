@@ -92,6 +92,7 @@ public class Medico {
     		throw new IllegalArgumentException("La especialidad es requerida");
     	this.especialidad = nuevaEspecialidad;
     }
+    
     public void actualizarDisponibilidad(DisponibilidadMedico nuevaDisponibilidad) {
     	validarNoEliminado();
     	
@@ -99,6 +100,7 @@ public class Medico {
     		throw new IllegalArgumentException("La disponibilidad es requerida");
     	this.disponibilidad = nuevaDisponibilidad;
     }
+    
     private void validarDatos(
             String nombre, String apellidoPaterno, String apellidoMaterno, Short edad, String email,
             String telefono, String cedulaProfesional, EspecialidadMedico especialidad) {

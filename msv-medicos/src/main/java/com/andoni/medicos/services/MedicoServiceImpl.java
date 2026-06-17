@@ -23,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @Transactional
 @Slf4j
-
 public class MedicoServiceImpl implements MedicoService {
 	
 	private final MedicoRepository medicoRepository;
@@ -86,9 +85,7 @@ public class MedicoServiceImpl implements MedicoService {
 	    
 	    medico.eliminar();
 	    
-	    log.info("Medico eliminado con id: {}", id);
-
-		
+	    log.info("Medico eliminado con id: {}", id);		
 	}
 
 
