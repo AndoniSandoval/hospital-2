@@ -42,5 +42,4 @@ public class CitaController extends CommonController<CitaRequest, CitaResponse, 
     		@PathVariable Long idPaciente) {
         return ResponseEntity.ok(service.pacienteTieneCitasActivas(idPaciente));
     }
-	
 }
