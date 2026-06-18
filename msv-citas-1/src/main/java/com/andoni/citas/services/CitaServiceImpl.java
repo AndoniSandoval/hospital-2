@@ -199,4 +199,14 @@ public class CitaServiceImpl implements CitaService {
                     + ESTADOS_INVALIDOS_REGISTROS_ASIGNADOS);
         }
 	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public boolean pacienteTieneCitasActivas(Long idPaciente) {
+		log.info("Validando si el paciente con id: {} tiene citas activas", idPaciente);
+		
+	    return citaRepository.existsByIdPacienteAndEstadoRegistroAndEstadoCitaIn(
+	    		idPaciente, EstadoRegistro.ACTIVO, List.of(
+	    				EstadoCita.CONFIRMADA, EstadoCita.EN_CURSO));
+	}
 }

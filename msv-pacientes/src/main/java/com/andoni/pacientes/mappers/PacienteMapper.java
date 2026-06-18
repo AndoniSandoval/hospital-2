@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import com.andoni.commons.dto.PacienteRequest;
 import com.andoni.commons.dto.PacienteResponse;
+import com.andoni.commons.enums.EstadoRegistro;
 import com.andoni.commons.mappers.CommonMapper;
 import com.andoni.pacientes.entities.Paciente;
 
@@ -24,6 +25,7 @@ public class PacienteMapper implements CommonMapper<PacienteRequest, PacienteRes
                 .email(request.email())
                 .telefono(request.telefono())
                 .direccion(request.direccion())
+                .estadoRegistro(EstadoRegistro.ACTIVO)
 				.build();
 	}
 

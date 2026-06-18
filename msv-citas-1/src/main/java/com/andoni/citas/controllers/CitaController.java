@@ -36,5 +36,11 @@ public class CitaController extends CommonController<CitaRequest, CitaResponse, 
         service.medicoTieneCitasAsignados(idMedico);
         return ResponseEntity.noContent().build();
     }
+    
+    @GetMapping("/paciente/{idPaciente}/tiene-citas-activas")
+    public ResponseEntity<Boolean> tieneCitasActivas(
+    		@PathVariable Long idPaciente) {
+        return ResponseEntity.ok(service.pacienteTieneCitasActivas(idPaciente));
+    }
 	
 }
