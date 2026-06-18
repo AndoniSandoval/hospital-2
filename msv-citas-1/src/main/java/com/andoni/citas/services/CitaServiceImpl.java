@@ -12,7 +12,9 @@ import com.andoni.citas.enums.EstadoCita;
 import com.andoni.citas.mappers.CitaMapper;
 import com.andoni.citas.repositories.CitaRepository;
 import com.andoni.commons.clients.MedicoClient;
+import com.andoni.commons.clients.PacienteClient;
 import com.andoni.commons.dto.MedicoResponse;
+import com.andoni.commons.dto.PacienteResponse;
 import com.andoni.commons.enums.DisponibilidadMedico;
 import com.andoni.commons.enums.EstadoRegistro;
 import com.andoni.commons.exceptions.EntidadRelacionadaException;
@@ -32,6 +34,7 @@ public class CitaServiceImpl implements CitaService {
 	private final MedicoClient medicoClient;
 	private final List<EstadoCita> ESTADOS_INVALIDOS_REGISTROS_ASIGNADOS =
 			List.of(EstadoCita.PENDIENTE, EstadoCita.CONFIRMADA, EstadoCita.EN_CURSO);
+	private final PacienteClient pacienteClient;
 	
 	@Override
 	public void actualizarEstadoCita(Long idCita, Long idEstadoCita) {
@@ -54,7 +57,7 @@ public class CitaServiceImpl implements CitaService {
 		return citaRepository.findByEstadoRegistro(EstadoRegistro.ACTIVO).stream()
 				.map(cita -> citaMapper.entidadAResponse(
 						cita,
-						null,
+						obtenerPacienteSinEstado(cita.getIdPaciente()),
 						obtenerMedicoSinEstado(cita.getIdMedico())
 						)
 					).toList();
@@ -65,26 +68,38 @@ public class CitaServiceImpl implements CitaService {
 	public CitaResponse obtenerPorId(Long id) {
 		Cita cita = obtenerCitaActivaOException(id);
 		
-		return citaMapper.entidadAResponse(cita,null,obtenerMedicoSinEstado(cita.getIdMedico()));
+		return citaMapper.entidadAResponse(cita,
+			    obtenerPacienteSinEstado(cita.getIdPaciente()),
+			    obtenerMedicoSinEstado(cita.getIdMedico()));
 	}
 	
 	@Override
 	public CitaResponse registar(CitaRequest request) {
 		log.info("Registrando nueva cita: {} ", request);
 		
+		//R1 existe y esta activo
 		MedicoResponse medico = obtenerMedicoActivo(request.idMedico());
-		
 		validarDisponibilidadMedico(medico.idDisponibilidad());
 		
-		//PacienteResponse
+		//R2 existe y esta activo
+		PacienteResponse paciente = obtenerPacienteActivo(request.idPaciente());
+		validarPacienteTieneRegistrosAsignados(request.idPaciente());
+		
+		//medico sin cita
+		medicoTieneCitasAsignados(request.idMedico());
 		
 		Cita cita = citaMapper.requestAEntidad(request);
 		
 		citaRepository.save(cita);
 		
+		cambiarDisponibilidadMedicoSegunEstadoCita(cita.getIdMedico(), cita.getEstadoCita());
+		
 		log.info("Cita registrada correctamente");
 		
-		return citaMapper.entidadAResponse(cita, null, obtenerMedicoSinEstado(cita.getIdMedico()));
+		return citaMapper.entidadAResponse(
+				cita,
+			    paciente,
+			    medico);
 	}
 
 	@Override
@@ -132,19 +147,19 @@ public class CitaServiceImpl implements CitaService {
 	}
 	
 	private MedicoResponse obtenerMedicoActivo(Long idMedico) {
-		log.info("Buscando medico activo con id: {} en el servicio remoto...");
+		log.info("Buscando medico activo con id: {} en el servicio remoto...", idMedico);
 		return medicoClient.obtenerMedicoActivoPorId(idMedico);
 	}
 	
 	private MedicoResponse obtenerMedicoSinEstado(Long idMedico) {
-		log.info("Buscando medico activo con id: {} en el servicio remoto...");
+		log.info("Buscando medico activo con id: {} en el servicio remoto...", idMedico);
 		return medicoClient.obtenerMedicoSinEstadoPorId(idMedico);
 	}
 	
 	private void validarDisponibilidadMedico(Long idDisponibilidad) {
 		log.info("Validando si el medico se encuentra en estado: {}", DisponibilidadMedico.DISPONIBLE);
 		
-		if(DisponibilidadMedico.DISPONIBLE.getCodigo().equals(idDisponibilidad))
+		if(!DisponibilidadMedico.DISPONIBLE.getCodigo().equals(idDisponibilidad))
 			throw new IllegalStateException("El medico no se encuentra en estado: " + DisponibilidadMedico.DISPONIBLE);
 	}
 	
@@ -155,7 +170,7 @@ public class CitaServiceImpl implements CitaService {
                 idPaciente, EstadoRegistro.ACTIVO, ESTADOS_INVALIDOS_REGISTROS_ASIGNADOS
         ))
             throw  new EntidadRelacionadaException(
-                    "No se puede registrar la citaya que el paciente solo puede tener una" +
+                    "No se puede registrar la cita, ya que el paciente solo puede tener una" +
                             "cita activa con los estados de: " + ESTADOS_INVALIDOS_REGISTROS_ASIGNADOS
             );
     }
@@ -208,5 +223,15 @@ public class CitaServiceImpl implements CitaService {
 	    return citaRepository.existsByIdPacienteAndEstadoRegistroAndEstadoCitaIn(
 	    		idPaciente, EstadoRegistro.ACTIVO, List.of(
 	    				EstadoCita.CONFIRMADA, EstadoCita.EN_CURSO));
+	}
+
+	private PacienteResponse obtenerPacienteSinEstado(Long idPaciente) {
+	    log.info("Buscando paciente sin validar estado con id: {} en el servicio remoto...", idPaciente);
+	    return pacienteClient.obtenerPacienteSinEstadoPorId(idPaciente);
+	}
+	
+	private PacienteResponse obtenerPacienteActivo(Long idPaciente) {
+	    log.info("Buscando paciente activo con id: {} en el servicio remoto...", idPaciente);
+	    return pacienteClient.obtenerPacienteActivoPorId(idPaciente);
 	}
 }
