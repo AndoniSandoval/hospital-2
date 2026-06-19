@@ -133,5 +133,11 @@ public class Cita {
 			throw new IllegalStateException("La cita con estado " + this.estadoCita + " no puede actualizarse");
 	}
 	
+	public boolean estaActiva() {
+	    return this.estadoCita == EstadoCita.PENDIENTE
+	        || this.estadoCita == EstadoCita.CONFIRMADA
+	        || this.estadoCita == EstadoCita.EN_CURSO;
+	}
+	
 	
 }

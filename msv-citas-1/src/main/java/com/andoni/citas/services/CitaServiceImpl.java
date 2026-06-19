@@ -109,17 +109,22 @@ public class CitaServiceImpl implements CitaService {
 		log.info("Actualizando cita con id: {}", id);
 		
 		MedicoResponse medico = obtenerMedicoActivo(request.idMedico());
-		
 		validarDisponibilidadMedico(medico.idDisponibilidad());
 		
 		if(!cita.getIdMedico().equals(request.idMedico()))
 			validarPacienteTieneRegistrosAsignados(request.idPaciente());
+		
+			//liberacion de medico
+			cambiarDisponibilidadMedico(cita.getIdMedico(), DisponibilidadMedico.DISPONIBLE.getCodigo());
+			medicoTieneCitasAsignados(request.idMedico());
 		
 		cita.actualizar(
 				request.idPaciente(), 
 				request.idMedico(), 
 				request.fechaCita(), 
 				request.sintomas());
+		
+		cambiarDisponibilidadMedicoSegunEstadoCita(request.idMedico(), cita.getEstadoCita());
 		
 		log.info("Cita actualizada con id: {}", id);
 			
@@ -132,6 +137,12 @@ public class CitaServiceImpl implements CitaService {
 		Cita cita = obtenerCitaActivaOException(id);
 		
 		log.info("Eliminando cita con id: {}", id);
+		
+		// Liberar medico - cita activa
+	    if (cita.estaActiva()) {
+	        cambiarDisponibilidadMedicoSegunEstadoCita(
+	            cita.getIdMedico(), EstadoCita.CANCELADA);
+	    }
 		
 		cita.eliminar();
 		log.info("Cita con id {} ha sido marcada como eliminada", id);
@@ -234,4 +245,5 @@ public class CitaServiceImpl implements CitaService {
 	    log.info("Buscando paciente activo con id: {} en el servicio remoto...", idPaciente);
 	    return pacienteClient.obtenerPacienteActivoPorId(idPaciente);
 	}
+	
 }
