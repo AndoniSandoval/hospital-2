@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="java.lang.Class">
-		<item key="replaceBarOpen" value="false"/>
+		<item key="replaceBarOpen" value="true"/>
 		<list key="findhistory">
+			<item value="medicoTieneCitasAsignadas"/>
+			<item value="validarPacienteTieneRegistrosAsignados"/>
+			<item value="cambiarDisponibilidadMedicoSegunEstadoCita"/>
+			<item value="disponibilidad"/>
+			<item value="obtenerCita"/>
+			<item value="Cita"/>
+			<item value="christian"/>
+			<item value="jwt"/>
 			<item value="@Transactional"/>
 			<item value="imc"/>
 			<item value="lombok"/>
+		</list>
+		<list key="replacehistory">
+			<item value="andoni"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
