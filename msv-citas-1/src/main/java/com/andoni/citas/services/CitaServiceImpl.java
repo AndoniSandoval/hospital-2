@@ -108,15 +108,20 @@ public class CitaServiceImpl implements CitaService {
 		
 		log.info("Actualizando cita con id: {}", id);
 		
+		
 		MedicoResponse medico = obtenerMedicoActivo(request.idMedico());
 		validarDisponibilidadMedico(medico.idDisponibilidad());
 		
-		if(!cita.getIdMedico().equals(request.idMedico()))
-			validarPacienteTieneRegistrosAsignados(request.idPaciente());
+		//si cambia medico
+		if (!cita.getIdMedico().equals(request.idMedico())) {
+	        cambiarDisponibilidadMedico(cita.getIdMedico(), DisponibilidadMedico.DISPONIBLE.getCodigo());
+	        medicoTieneCitasAsignados(request.idMedico());
+	    }
 		
-			//liberacion de medico
-			cambiarDisponibilidadMedico(cita.getIdMedico(), DisponibilidadMedico.DISPONIBLE.getCodigo());
-			medicoTieneCitasAsignados(request.idMedico());
+		// si cambia paciente
+	    if (!cita.getIdPaciente().equals(request.idPaciente())) {
+	        validarPacienteTieneRegistrosAsignados(request.idPaciente());
+	    }
 		
 		cita.actualizar(
 				request.idPaciente(), 
@@ -127,9 +132,11 @@ public class CitaServiceImpl implements CitaService {
 		cambiarDisponibilidadMedicoSegunEstadoCita(request.idMedico(), cita.getEstadoCita());
 		
 		log.info("Cita actualizada con id: {}", id);
+		
+		PacienteResponse paciente = obtenerPacienteSinEstado(cita.getIdPaciente());
 			
 		return citaMapper.entidadAResponse(
-				cita, null, medico);
+				cita, paciente, medico);
 	}
 	
 	@Override
@@ -181,8 +188,7 @@ public class CitaServiceImpl implements CitaService {
                 idPaciente, EstadoRegistro.ACTIVO, ESTADOS_INVALIDOS_REGISTROS_ASIGNADOS
         ))
             throw  new EntidadRelacionadaException(
-                    "No se puede registrar la cita, ya que el paciente solo puede tener una" +
-                            "cita activa con los estados de: " + ESTADOS_INVALIDOS_REGISTROS_ASIGNADOS
+                    "El paciente ya tiene una cita activa. No es posible registrar una nueva cita hasta que la actual sea finalizada o cancelada."
             );
     }
 	
@@ -221,8 +227,7 @@ public class CitaServiceImpl implements CitaService {
 
         if (tieneCitas) {
             throw new EntidadRelacionadaException(
-                    "No se puede modificar el médico ya que tiene citas con estados: "
-                    + ESTADOS_INVALIDOS_REGISTROS_ASIGNADOS);
+                    "El médico ya tiene una cita activa. No es posible asignarle una nueva hasta que la actual sea finalizada o cancelada.");
         }
 	}
 	
